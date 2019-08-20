@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="uk-section uk-section-default uk-padding-remove-vertical">
+        <div class="uk-container uk-margin-bottom">
+            <div uk-grid="" class="uk-grid uk-flex-center">
+                <div class="uk-width-1-1 uk-first-column">
+                    <h2 class="uk-title uk-text-center uk-text-primary uk-padding-small uk-margin-remove">
+                        {% block data_title %}{% endblock %}
+                    </h2>
+                    {% block data_menu %}{% endblock %}
+                </div>
+                {% block top_content %}{% endblock %}
+                <div class="uk-width-4-5 uk-first-column uk-margin-remove-top">
+                    {% block data_content %}{% endblock %}
+                </div>
+                <div class="uk-width-1-5 uk-margin-remove-top">
+                    {% block extra_block %}
+                        <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+                            <li class="uk-nav-header">{% trans "Sections" %}</li>
+                            <li><a href="{% url 'continents' %}"><span class="uk-margin-small-right" uk-icon="icon: list"></span>
+                                {% trans "Continents" %}</a>
+                            </li>
+                            <li><a href="{% url 'countries' %}"><span class="uk-margin-small-right" uk-icon="icon: world"></span>
+                                {% trans "Countries" %}</a>
+                            </li>
+                            <li><a href="{% url 'timezones' %}"><span class="uk-margin-small-right" uk-icon="icon: clock"></span>
+                                {% trans "Timezones" %}</a>
+                            </li>
+                            <li><a href="{% url 'cities' %}"><span class="uk-margin-small-right" uk-icon="icon: image"></span>
+                                {% trans "Cities" %}</a>
+                            </li>
+                            <li><a href="{% url 'universities' %}"><span class="uk-margin-small-right" uk-icon="icon: location"></span>
+                                {% trans "Universities" %}</a>
+                            </li>
+                            <li class="uk-nav-divider"></li>
+                            <li><a href="{% url 'student_group_search' %}"><span class="uk-margin-small-right" uk-icon="icon: users"></span>
+                                {% trans "Groups" %}</a>
+                            </li>
+                            <li><a href="{% url 'student_search' %}"><span class="uk-margin-small-right" uk-icon="icon: user"></span>
+                                {% trans "Students" %}</a>
+                            </li>
+                            <li><a href="{% url 'photo_search' %}"><span class="uk-margin-small-right" uk-icon="icon: search"></span>
+                                {% trans "Search by photo" %}</a>
+                            </li>
+                            <li><a href="{% url 'search_by_photo_url' %}"><span class="uk-margin-small-right" uk-icon="icon: link"></span>
+                                {% trans "Search by photo URL" %}</a>
+                            </li>
+                            <li><a href="{% url 'my_searches' %}"><span class="uk-margin-small-right" uk-icon="icon: grid"></span>
+                                {% trans "My searhes" %}</a>
+                            </li>
+                        </ul>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

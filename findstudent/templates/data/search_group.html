@@ -1,0 +1,39 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+{% load bootstrap4 %}
+
+{% block title %}{% trans "FindStudent" %} | {% trans "Search" %}{% endblock %}
+{% block data_title %}{% trans "Search student group by params" %}{% endblock %}
+
+{% block data_content %}
+    <div class="uk-child-width-1-2" uk-grid>
+        <div>
+            {% for obj in filter.qs %}
+
+                <div class="uk-card uk-card-default uk-margin">
+                    <div class="uk-card-media-top">
+                        {% if obj.avatar %}
+                            <img src="{{ obj.avatar.url }}" alt="" width="100%">
+                        {% endif %}
+                    </div>
+                    <div class="uk-card-body">
+                        <h3 class="uk-card-title"><a href="{% url 'group_page' obj.name_en %}">{{ obj.name }}</a></h3>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            {% bootstrap_messages %}
+            <form method="get" class="form">
+                {% csrf_token %}
+                {% bootstrap_form filter.form %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">{% trans "Search" %}</button>
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+{% endblock data_content %}

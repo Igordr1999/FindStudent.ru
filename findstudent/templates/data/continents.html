@@ -1,0 +1,33 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Continents" %}{% endblock %}
+{% block data_title %}{% trans "Continents" %}{% endblock %}
+
+{% block data_content %}
+    <table class="uk-table uk-table-striped uk-table-hover uk-table-small">
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Alpha2" %}</th>
+            <th>{% trans "Map" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for continent in object_list %}
+            <tr>
+                <td>{{ continent.name }}</td>
+                <td>{{ continent.alpha2 }}</td>
+                <td>
+                    {% if continent.image %}
+                        <img class="uk-preserve-width uk-border-circle" src="{{ continent.image.url }}" width="40px" alt="">
+                    {% else %}
+                        <img class="uk-preserve-width uk-border-circle" src="#" width="40" alt="NO IMAGE">
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

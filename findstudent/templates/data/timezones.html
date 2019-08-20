@@ -1,0 +1,43 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load bootstrap4 %}
+
+{% block title %}{% trans "Timezones" %}{% endblock %}
+{% block data_title %}{% trans "Timezones" %}{% endblock %}
+
+{% block data_content %}
+    <table class="uk-table uk-table-striped uk-table-hover uk-table-small">
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Abbr" %}</th>
+            <th>{% trans "GMT offset" %}</th>
+            <th>{% trans "DST offset" %}</th>
+            <th>{% trans "Time" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for timezone in object_list %}
+            <tr>
+                <td>{{ timezone.name }}</td>
+                <td>{{ timezone.abbr_long }} ({{ timezone.abbr_short }})</td>
+                <td>{{ timezone.raw_offset }}</td>
+                <td>{{ timezone.dst_offset }}</td>
+                <td><div id="div_{{ timezone.abbr_short }}"></div></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% bootstrap_pagination page_obj %}
+
+    <script>
+        $(function(){
+            setInterval(function(){
+                {% for timezone in object_list %}
+                    $('#div_{{ timezone.abbr_short }}').text(moment.tz('{{ timezone.name_en }}').format('DD-MM-YYYY HH:mm:ss'));
+                {% endfor %}
+            },1000);
+        });
+    </script>
+{% endblock %}

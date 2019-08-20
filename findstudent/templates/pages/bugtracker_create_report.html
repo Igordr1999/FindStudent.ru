@@ -1,0 +1,21 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+{% load bootstrap4 %}
+
+{% block title %}{% trans "FindStudent" %} | {% trans "Create report" %}{% endblock %}
+{% block data_title %}{% trans "Bugtracker. Create report" %}{% endblock %}
+
+{% block data_content %}
+    <div class="uk-grid-large uk-child-width-1-1" uk-grid>
+        {% bootstrap_messages %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-success">{% trans "Save" %}</button>
+            {% endbuttons %}
+        </form>
+    </div>
+{% endblock data_content %}

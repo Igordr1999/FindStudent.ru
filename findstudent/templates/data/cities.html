@@ -1,0 +1,82 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+{% load bootstrap4 %}
+
+{% block title %}{% trans "Cities" %}{% endblock %}
+{% block data_title %}{% trans "Cities" %}{% endblock %}
+
+{% block data_content %}
+    <div class="uk-grid-small uk-child-width-1-1" uk-grid>
+        <div>
+            <div id="map"></div>
+        </div>
+        <div>
+            <table class="uk-table uk-table-striped uk-table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Country" %}</th>
+                    <th>{% trans "IATA code" %}</th>
+                    <th>{% trans "Area" %}</th>
+                    <th>{% trans "Population" %}</th>
+                    <th>{% trans "Continent" %}</th>
+                    <th>{% trans "Flag" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for city in object_list %}
+                    <tr>
+                        <td>{{ city.name }}</td>
+                        <td>{{ city.country.name }}</td>
+                        <td>{{ city.iata_code }}</td>
+                        <td>{{ city.area|intcomma }}</td>
+                        <td>{{ city.population|intcomma }}</td>
+                        <td>{{ city.continent.name }}</td>
+                        <td>
+                            {% if city.country.flag %}
+                                <img class="uk-preserve-width" src="{{ city.country.flag.url }}" width="40" alt="">
+                            {% else %}
+                                <img class="uk-preserve-width" src="#" width="40" alt="NO IMAGE">
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% bootstrap_pagination page_obj %}
+
+    <style>
+        #map {
+            width: 100%; height: 500px; padding: 0; margin: 0;
+        }
+    </style>
+
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init () {
+            ymaps.ready(init);
+            function init() {
+                var myMap = new ymaps.Map("map", {
+                    center: [55, 37],
+                    zoom: 4
+                }, {
+                    searchControlProvider: 'yandex#search'
+                });
+                {% for city in object_list %}
+                    myMap.geoObjects
+                        .add(new ymaps.Placemark([{{ city.latitude|unlocalize  }}, {{ city.longitude|unlocalize }}], {
+                            balloonContent: '{{ city.name }}',
+                            iconCaption: '{{ city.name }}'
+                        }, {
+                            preset: 'islands#greenDotIconWithCaption'
+                        }))
+                {% endfor %}
+            }
+        }
+    </script>
+{% endblock %}

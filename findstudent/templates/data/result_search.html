@@ -1,0 +1,164 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+{% load bootstrap4 %}
+
+{% block title %}{% trans "FindStudent" %} | {% trans "Searching results" %}{% endblock %}
+{% block data_title %}{% trans "Searching results" %}{% endblock %}
+
+{% block data_content %}
+    <ul uk-tab>
+        {% if object.detected_faces.count %}<li><a href="#">{% trans "Detected faces" %}</a></li>{% endif %}
+        {% if object.universal_identified_face.count %}<li><a href="#">{% trans "Identified faces" %}</a></li>{% endif %}
+        <li><a href="#">{% trans "About search" %}</a></li>
+    </ul>
+
+    <ul class="uk-switcher uk-margin">
+        {% if object.detected_faces.count %}
+            <li>
+                <div class="uk-child-width-1-2@s" uk-grid>
+                    <div>
+                        <div class="uk-inline uk-dark" id="box">
+                            <div class="detected_picture">
+                                <img src="{{ object.photo.url }}" id="detect_image">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div uk-grid>
+                            <div class="uk-width-auto@m uk-flex-last@m">
+                                <ul class="uk-tab-right" uk-tab="connect: #component-tab-right; animation: uk-animation-fade">
+                                    {% for person in object.detected_faces.all %}
+                                        <li id="person{{ forloop.counter }}"><a href="#" >{% trans "Person" %} {{ forloop.counter }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="uk-width-expand@m">
+                                <ul id="component-tab-right" class="uk-switcher">
+                                    {% for person in object.detected_faces.all %}
+                                        <li>
+                                            <ul class="uk-list uk-list-divider">
+                                                <li>Age: {{ person.age_range_low }} - {{ person.age_range_high }}</li>
+                                                <li>Sex: {{ person.gender_value }}</li>
+                                                <li>{% trans "Smile" %}: {% if person.smile_value == True %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</li>
+                                                <li>{% trans "Eyeglasses" %}: {% if person.eyeglasses_value == True %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</li>
+                                                <li>{% trans "Sunglasses" %}: {% if person.sunglasses_value == True %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</li>
+                                                <li>{% trans "Beard" %}: {% if person.beard_value == True %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</li>
+                                                <li>{% trans "Open eyes" %}: {% if person.mustache_value == True %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</li>
+                                                <li>{% trans "Open mouth" %}: {% if person.open_mouth_value == True %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</li>
+                                                <li>{% trans "Brightness qualidty" %}: {{ person.brightness_quality|floatformat:"-2" }}%</li>
+                                                <li>{% trans "Sharpness quality" %}: {{ person.sharpness_quality|floatformat:"-2" }}%</li>
+                                                {% for e in person.emotions.all %}
+                                                    <li>Emotion: {{ e.emotion_type.name }} ({{ e.emotion_confidence|floatformat:"-2" }}%)</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endif %}
+        {% if object.universal_identified_face.count %}
+            <li>
+                <div class="uk-child-width-1-2@s" uk-grid>
+                    <div>
+                        <div class="uk-inline uk-dark" id="box">
+                            <img src="{{ object.photo.url }}" id="identified_image">
+                        </div>
+                    </div>
+                    <div>
+                        <div uk-grid>
+                            <div class="uk-width-auto@m uk-flex-last@m">
+                                <ul class="uk-tab-right" uk-tab="connect: #component-tab-right2; animation: uk-animation-fade">
+                                    {% for person in object.universal_identified_face.all %}
+                                        <li><a href="#" >{{ person.student.first_name }} {{ person.student.last_name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="uk-width-expand@m">
+                                <ul id="component-tab-right2" class="uk-switcher">
+                                    {% for person in object.universal_identified_face.all %}
+                                        <li>
+                                            <ul class="uk-list uk-list-divider">
+                                                <li>{% trans "Name" %}: {{ person.student.first_name }} {{ person.student.last_name }}</li>
+                                                <li>{% trans "Birthday" %}: {{ person.student.birthday }}</li>
+                                                <li>{% trans "Sex" %}: {{ person.student.sex  }}</li>
+                                                <li>{% trans "VK account" %}: <a href="https://vk.com/id{{ person.student.user_id }}">{{ person.student.nickname  }}</a></li>
+                                                <li>{% trans "More information" %}: <a href="{% url 'student_page' person.student.user_id %}">{% trans "Link" %}</a></li>
+                                                <li>{% trans "Similarity" %}: {{ person.identified_faces.first.similarity|floatformat:"-2" }}%</li>
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endif %}
+        <li>
+            <h3>{% trans "About" %}</h3>
+            <ul class="uk-list uk-list-striped">
+                <li>{% trans "Owner" %}: {{ object.owner }}</li>
+                <li>{% trans "Record create" %}: {{ object.record_create_date }}</li>
+                <li>{% trans "Person detected" %}:  {{ object.detected_faces.count }}</li>
+                <li>{% trans "Person identified" %}:  {{ object.universal_identified_face.count }}</li>
+            </ul>
+        </li>
+    </ul>
+
+    <script>
+        var imageRectangle = document.querySelector('.detected_picture');
+
+        function imageSetPoint(x, y) {
+            var point = document.createElement('div');
+            point.className = 'image-point';
+            point.style.left = x + '%';
+            point.style.top = y + '%';
+            imageRectangle.appendChild(point);
+        };
+
+        {% localize off %}
+            {% for person in object.detected_faces.all %}
+                {% for point in person.landmarks.all %}
+                    imageSetPoint({{ point.x_coordinate }}*100, {{ point.y_coordinate }}*100);
+                {% endfor %}
+            {% endfor %}
+        {% endlocalize %}
+
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            {% localize off %}
+                {% for person in object.detected_faces.all %}
+                    var top = {{ person.bounding_box_top }} * 100;
+                    var left = {{ person.bounding_box_left }} * 100;
+                    var height = {{ person.bounding_box_height }} * 100;
+                    var width = {{ person.bounding_box_width }} * 100;
+                    $('#detect_image').after('<div class="face-box" id="detect_box_{{ forloop.counter }}" style="position: absolute; top: ' + top + '%; left: ' + left + '%; height: ' + height +'%; width: ' + width + '%;" uk-tooltip="{% trans "PERSON" %} {{ forloop.counter }}"></div>');
+                {% endfor %}
+            {% endlocalize %}
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            {% localize off %}
+                {% for person in object.universal_identified_face.all %}
+                    var top = {{ person.identified_faces.first.bounding_box_top }} * 100;
+                    var left = {{ person.identified_faces.first.bounding_box_left }} * 100;
+                    var height = {{ person.identified_faces.first.bounding_box_height }} * 100;
+                    var width = {{ person.identified_faces.first.bounding_box_width }} * 100;
+                    $('#identified_image').after('<div class="face-box" id="identified_box_{{ forloop.counter }}" style="position: absolute; top: ' + top + '%; left: ' + left + '%; height: ' + height +'%; width: ' + width + '%;" uk-tooltip="{{ person.student.first_name }} {{ person.student.last_name }}"></div>');
+                {% endfor %}
+            {% endlocalize %}
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load humanize %}
+
+{% block title %}{{ object.last_name }} {{ object.first_name }}{% endblock %}
+
+{% block data_content %}
+    <div class="uk-grid-large uk-child-width-1-2" uk-grid>
+        <div>
+            <img src="{{ object.avatar_original.url }}">
+        </div>
+        <div>
+            <h1>{{ object.first_name }} {{ object.last_name }}</h1>
+            <p>{{ object.status }}</p>
+            <ul class="uk-list uk-list-divider">
+                {% if object.city %}<li>{% trans "City" %}: {{ object.city.name }}</li>{% endif %}
+                {% if object.home_town %}<li>{% trans "Home town" %}: {{ object.home_town.name }}</li>{% endif %}
+                <li>{% trans "Birthday" %}: {{ object.birthday }}</li>
+                <li>{% trans "Sex" %}: {{ object.sex }}</li>
+                <li>{% trans "Nickname" %}: <a href="https://vk.com/id{{ object.user_id }}">{{ object.nickname }}</a></li>
+                {% if object.university %}<li>{% trans "University" %}: <a href="{% url 'university' object.university.abbr_en %}">{{ object.university.name }}</a></li>{% endif %}
+                {% if object.student_group.institute %}<li>{% trans "Institute" %}: {{ object.student_group.institute.name }}</li>{% endif %}
+                <li>{% trans "Student group" %}: <a href="{% url 'group_page' object.student_group.name_en %}">{{ object.student_group.name }}</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="uk-grid-large uk-child-width-1-2" uk-grid>
+        <div>
+            <h1>{% trans "BLOCK" %}</h1>
+        </div>
+        <div>
+            {% for photo in photos %}
+                <div class="uk-card uk-card-default uk-margin-bottom">
+                    <div class="uk-card-header">
+                        <div class="uk-grid-small uk-flex-middle" uk-grid>
+                            <div class="uk-width-auto">
+                                <img class="uk-border-circle" width="40" height="40" src="{{ object.avatar.url }}">
+                            </div>
+                            <div class="uk-width-expand">
+                                <h3 class="uk-card-title uk-margin-remove-bottom">{{ object.first_name }} {{ object.last_name }}</h3>
+                                <p class="uk-text-meta uk-margin-remove-top"><time datetime="{{ photo.create_date }}">{{ photo.create_date }}</time></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <img data-src="{{ photo.photo.url }}" alt="" uk-img>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

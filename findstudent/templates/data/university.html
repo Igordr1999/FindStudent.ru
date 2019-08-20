@@ -1,0 +1,182 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+
+{% block title %}{{ object.name }}{% endblock %}
+{% block data_title %}{{ object.name }}{% endblock %}
+
+{% block data_content %}
+    <ul uk-tab>
+        <li><a href="#">{% trans "About object" %}</a></li>
+        <li><a href="#">{% trans "Institute and Departments" %}</a></li>
+        <li><a href="#">{% trans "Groups" %}</a></li>
+        {% if lecturers %}<li><a href="#">{% trans "Lecturers" %}</a></li>{% endif %}
+        <li><a href="#">{% trans "Contacts" %}</a></li>
+    </ul>
+
+    <ul class="uk-switcher uk-margin">
+        <li>
+            <div class="uk-grid-large uk-child-width-1-2" uk-grid>
+                <div><img src="{{ object.logo.url }}"></div>
+                <div>
+                    <ul class="uk-list uk-list-divider">
+                        <li>{% trans "Name" %}: {{ object.name }}</li>
+                        <li>{% trans "Abbreviation" %}: {{ object.abbr }}</li>
+                        <li>{% trans "Slogan" %}: {{ object.slogan }}</li>
+                        <li>{% trans "Founded" %}: {{ object.founded }}</li>
+                        <li>{% trans "Student count" %}: {{ object.student_count|intcomma }}</li>
+                        {% if object.website %}
+                            <li>{% trans "Website" %}: <a href="{{ object.website }}">{{ object.website }}</a></li>
+                        {% endif %}
+                        <li>{% trans "City" %}: <a href="#">{{ object.city.name }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="uk-width-1-2@s">
+                <ul class="uk-nav-primary uk-nav-parent-icon" uk-nav>
+                    {% for institute in institutes %}
+                        <li class="uk-parent">
+                            <a href="#">{{ institute.name }}</a>
+                            <ul class="uk-nav-sub">
+                                {% for department in departments %}
+                                    {% if department.institute == institute %}
+                                        <li><a href="#">{{ department.name }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </li>
+        <li>
+            <div uk-filter="target: .js-filter">
+
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-expand">
+
+                        <div class="uk-grid-small uk-grid-divider uk-child-width-1-3" uk-grid>
+                            <div>
+                                <ul class="uk-subnav uk-subnav-pill" uk-margin>
+                                    <li class="uk-active" uk-filter-control><a href="#">{% trans "All" %}</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <ul class="uk-subnav uk-subnav-pill" uk-margin>
+                                    {% for institute in institutes %}
+                                        <li uk-filter-control="[data-color='{{ institute.name }}']"><a href="#">{{ institute.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="uk-width-auto uk-text-nowrap">
+
+
+                        <span class="uk-active" uk-filter-control="sort: data-name"><a class="uk-icon-link" href="#" uk-icon="icon: arrow-down"></a></span>
+                        <span uk-filter-control="sort: data-name; order: desc"><a class="uk-icon-link" href="#" uk-icon="icon: arrow-up"></a></span>
+
+                    </div>
+                </div>
+
+                <ul class="js-filter uk-child-width-1-2 uk-child-width-1-3@m uk-text-center" uk-grid="masonry: true">
+                    {% for group in groups %}
+                        <li data-color="{{ group.institute.name }}" data-size="large" data-name="{{ group.institute.id }}">
+                            <a href="{% url 'group_page' group.name_en %}">
+                                <div class="uk-card uk-card-default">
+                                    <div class="uk-card-media-top">
+                                        <img src="{{ group.avatar_url }}" alt="" width="100%">
+                                    </div>
+                                    <div class="uk-card-body">
+                                        <h3 class="uk-card-title">{{ group.name }}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+            <div class="uk-child-width-1-2" uk-grid>
+                {% for group in groups %}
+                    <div>
+                        <h3><a href="{% url 'group_page' group.name_en %}">{{ group.name }}</a></h3>
+                    </div>
+                {% endfor %}
+            </div>
+        </li>
+        {% if lecturers %}
+            <li>
+                <h3>{% trans "Actual information on the official website" %}: <a href="{{ object.website }}">{{ object.abbr }}</a></h3>
+
+                <table class="uk-table uk-table-striped uk-table-hover uk-table-small">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Last name" %}</th>
+                        <th>{% trans "First name" %}</th>
+                        <th>{% trans "Patronymic" %}</th>
+                        <th>{% trans "Institute" %}</th>
+                        <th>{% trans "Department" %}</th>
+                        <th>{% trans "Photo" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for lecturer in lecturers %}
+                        <tr>
+                            <td>{{ lecturer.last_name }}</td>
+                            <td>{{ lecturer.first_name }}</td>
+                            <td>{{ lecturer.patronymic }}</td>
+                            <td>{{ lecturer.department.institute }}</td>
+                            <td>{{ lecturer.department }}</td>
+                            <td>
+                                {% if lecturer.photo %}
+                                    <img class="uk-preserve-width" src="{{ lecturer.photo.url }}" width="40px">
+                                {% else %}
+                                    <img class="uk-preserve-width" src="#" width="40">
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </li>
+        {% endif %}
+        <li>
+            {% if object.website %}
+                <h3>{% trans "Actual information on the official website" %}: <a href="{{ object.website }}">{{ object.abbr }}</a></h3>
+            {% endif %}
+            <div id="map"></div>
+        </li>
+    </ul>
+
+    <style>
+        #map {
+            width: 100%; height: 500px; padding: 0; margin: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init () {
+            ymaps.ready(init);
+            function init() {
+                var myMap = new ymaps.Map("map", {
+                    center: [{{ object.lat|unlocalize  }}, {{ object.lon|unlocalize }}],
+                    zoom: 10
+                }, {
+                    searchControlProvider: 'yandex#search'
+                });
+                myMap.geoObjects
+                    .add(new ymaps.Placemark([{{ object.lat|unlocalize  }}, {{ object.lon|unlocalize }}], {
+                        balloonContent: '{{ object.name }}',
+                        iconCaption: '{{ object.abbr }}'
+                    }, {
+                        preset: 'islands#blueDotIconWithCaption'
+                    }))
+            }
+        }
+    </script>
+{% endblock %}

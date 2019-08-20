@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+
+{% block title %}{% trans "FindStudent" %} | {% trans "Home page" %}{% endblock %}
+
+{% block content %}
+    <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="ratio: false; autoplay: true; autoplay-interval: 3000; animation: fade;">
+
+        <ul class="uk-slideshow-items" uk-height-viewport="offset-top: true; offset-top: 80">
+            <li>
+                <img src="https://chisw.com/ckeditor_assets/pictures/172/content_FaceRecognition.png" alt="" uk-cover>
+            </li>
+            <li>
+                <img src="https://www.dw.com/image/39425377_304.jpg" alt="" uk-cover>
+            </li>
+            <li>
+                <img src="https://s.hi-news.ru/wp-content/uploads/2017/12/face-recognition-750x375.jpg" alt="" uk-cover>
+            </li>
+        </ul>
+
+        <div class="uk-position-bottom-center uk-position-small">
+            <ul class="uk-dotnav">
+                <li uk-slideshow-item="0"><a href="#">{% trans "BLOCK" %}</a></li>
+                <li uk-slideshow-item="1"><a href="#">{% trans "BLOCK" %}</a></li>
+                <li uk-slideshow-item="2"><a href="#">{% trans "BLOCK" %}</a></li>
+            </ul>
+        </div>
+
+        <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+        <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
+
+    </div>
+
+    <div class="uk-section uk-section-secondary uk-light">
+        <div class="uk-container">
+        </div>
+    </div>
+
+    <div uk-slider="center: true" class="uk-padding-top uk-section-secondary">
+
+        <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1">
+
+            <ul class="uk-slider-items uk-child-width-1-2@s uk-grid">
+                <li>
+                    <div class="uk-card uk-card-default">
+                        <div class="uk-card-media-top">
+                            <img src="https://cdn-images-1.medium.com/max/1200/1*eL6X8TDuNVgssZI73H5C-Q.jpeg" alt="">
+                        </div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title" style="color: #1e87f0">{% trans "Search students by photo" %}</h3>
+                            <p>{% trans "Just upload a photo and get complete information about the people in the photo." %}</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="uk-card uk-card-default">
+                        <div class="uk-card-media-top">
+                            <img src="https://www.kurashix.com/wp-content/uploads/2018/10/advanced-search-form-in-css-and-jquery-codyhouse-form-html-css.png" alt="">
+                        </div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title" style="color: #1e87f0">{% trans "Search for students by parameters" %}</h3>
+                            <p>{% trans "Find a student by filling out the search form parameters" %}</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="uk-card uk-card-default">
+                        <div class="uk-card-media-top">
+                            <img src="https://www.buguroo.com/hubfs/website/images/BLOG/banner_vulnerable_al_phishing.jpg" alt="">
+                        </div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title" style="color: #1e87f0">{% trans "Mood Research" %}</h3>
+                            <p>{% trans "Explore the mood of a person based on public photos" %}</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="uk-card uk-card-default">
+                        <div class="uk-card-media-top">
+                            <img src="https://dropi.ru/img/uploads/2018-11-19/11_original.jpeg" alt="">
+                        </div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title" style="color: #1e87f0">{% trans "Interest research" %}</h3>
+                            <p>{% trans "Explore a person’s interests based on their profile" %}</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="uk-card uk-card-default">
+                        <div class="uk-card-media-top">
+                            <img src="https://binyaprak.com/images/blog_articles/130/networ_20170201-124954_1.jpg" alt="">
+                        </div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title" style="color: #1e87f0">{% trans "Student environment research" %}</h3>
+                            <p>{% trans "Explore the environment and the approximate location of a person, based on his virtual friend list" %}</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="uk-card uk-card-default">
+                        <div class="uk-card-media-top">
+                            <img src="https://www.jendev.com/media/1074/utility2020.jpg?anchor=center&mode=crop&rnd=131142665090000000&format=jpg" alt="">
+                        </div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title" style="color: #1e87f0">{% trans "REST API support" %}</h3>
+                            <p>{% trans "Upload photos and download megabytes of data in tens of thousands of lines in a few seconds in automatic mode" %}</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
+
+        </div>
+
+        <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+
+    </div>
+
+{% endblock %}

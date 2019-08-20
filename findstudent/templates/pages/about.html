@@ -1,0 +1,65 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+
+{% block title %}{% trans "FindStudent" %} | {% trans "About" %}{% endblock %}
+
+{% block extra_block %}{% endblock extra_block %}
+
+{% block data_menu %}
+    <h2>{% trans "FindStudent is a service for finding students by photo, as well as researching the mood, interests and environment of people." %}</h2>
+
+    <div class="uk-child-width-1-3" uk-grid>
+        <div>
+            <div class="uk-countdown-number">8</div>
+            <h3 class="uk-margin-small ">{% trans "Mood labels" %}</h3>
+        </div>
+
+        <div>
+            <div class="uk-countdown-number">30</div>
+            <h3 class="uk-margin-small">{% trans "Points on the face" %}</h3>
+        </div>
+
+        <div>
+            <div class="uk-countdown-number">50</div>
+            <h3 class="uk-margin-small">{% trans "Tags of intereste" %}</h3>
+        </div>
+
+        <div>
+            <div class="uk-countdown-number">400+</div>
+            <h3 class="uk-margin-small">{% trans "Student groups" %}</h3>
+        </div>
+
+        <div>
+            <div class="uk-countdown-number">12.000+</div>
+            <h3 class="uk-margin-small">{% trans "Students" %}</h3>
+        </div>
+
+        <div>
+            <div class="uk-countdown-number">120.000+</div>
+            <h3 class="uk-margin-small">{% trans "Students photos" %}</h3>
+        </div>
+
+    </div>
+    <h3>{% trans "Service features" %}:</h3>
+    <dl class="uk-description-list uk-description-list-divider">
+        <dt>{% trans "Search students by photo" %}</dt>
+        <dd>{% trans "Just upload a photo and get complete information about the people in the photo." %}</dd>
+
+        <dt>{% trans "Search for students by parameters" %}</dt>
+        <dd>{% trans "Find a student by filling out the search form parameters" %}</dd>
+
+        <dt>{% trans "Mood Research" %}</dt>
+        <dd>{% trans "Explore the mood of a person based on public photos" %}</dd>
+
+        <dt>{% trans "Interest research" %}</dt>
+        <dd>{% trans "Explore a person’s interests based on their profile" %}</dd>
+
+        <dt>{% trans "Student environment research" %}</dt>
+        <dd>{% trans "Explore the environment and the approximate location of a person, based on his virtual friend list" %}</dd>
+
+        <dt>{% trans "REST API support" %}</dt>
+        <dd>{% trans "Upload photos and download megabytes of data in tens of thousands of lines in a few seconds in automatic mode" %}</dd>
+    </dl>
+{% endblock data_menu %}

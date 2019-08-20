@@ -1,0 +1,30 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load humanize %}
+{% load bootstrap4 %}
+
+{% block title %}{{ student_group.name }}{% endblock %}
+{% block data_title %}{% trans "Students by group" %} {{ student_group.name }}{% endblock %}
+
+{% block data_content %}
+    <div class="uk-child-width-1-4" uk-grid>
+        {% for student in object_list %}
+            <a href="{% url 'student_page' student.user_id %}">
+                <div>
+                    <div class="uk-card uk-card-default">
+                        <div class="uk-card-media-top">
+                            {% if student.avatar %}
+                                <img src="{{ student.avatar.url }}" alt="" width="100%">
+                            {% endif %}
+                        </div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title">{{ student.first_name }} {{ student.last_name }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+    {% bootstrap_pagination page_obj %}
+{% endblock %}

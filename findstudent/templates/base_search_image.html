@@ -1,0 +1,131 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+{% load bootstrap4 %}
+
+{% block title %}{% trans "FindStudent" %} | {% trans "Search" %}{% endblock %}
+{% block data_title %}Search{% endblock %}
+
+{% block data_content %}
+    <div class="uk-grid-large uk-child-width-1-2" uk-grid>
+
+        {% block search_alert_block %}
+            <div id="search_alert" class="uk-hidden">
+                <div class="uk-alert-success" uk-alert>
+                    <a class="uk-alert-close" uk-close></a>
+                    <p>{% trans "Search started. DON'T RELOAD PAGE and wait 20 - 30 seconds!" %}</p>
+                    <progress id="js-progressbar" class="uk-progress" value="10" max="100"></progress>
+                </div>
+            </div>
+        {% endblock search_alert_block %}
+
+        {% block search_form_block %}
+            <div id="search_by_photo_form">
+                <h2>{% trans "Upload image" %}</h2>
+                {% bootstrap_messages %}
+                <form method="post" enctype="multipart/form-data"
+                      onsubmit="Submit_search_form()">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% buttons %}
+                        <button type="submit" class="btn btn-success">{% trans "Search" %}</button>
+                    {% endbuttons %}
+                </form>
+            </div>
+        {% endblock search_form_block %}
+
+        {% block search_instruction %}
+            <div>
+                <h2>{% trans "Instruction" %}</h2>
+                <ul uk-accordion>
+                    <li>
+                        <a class="uk-accordion-title" href="#">1. {% trans "Click on the button 'Select image' and upload image" %}</a>
+                        <div class="uk-accordion-content">
+                            <p>{% trans "Click on the button 'Select image' and select the desired image for further analysis." %}</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="uk-accordion-title" href="#">2. {% trans "Click on the 'Search' button" %}</a>
+                        <div class="uk-accordion-content">
+                            <p>{% trans "Click on the 'Search' button. The search will start instantly." %}</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="uk-accordion-title" href="#">3. {% trans "Wait 20 - 30 seconds. DON'T UPDATE PAGE" %}</a>
+                        <div class="uk-accordion-content">
+                            <p>{% trans "Wait for the notification about the end of the analysis." %}</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="uk-accordion-title" href="#">4. {% trans "Analyze search results right on this page" %}</a>
+                        <div class="uk-accordion-content">
+                            <p>{% trans "After the notification about the end of the analysis appears, you can see the results of detection on this page or in the My Searches page." %}</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="uk-accordion-title" href="#">{% trans "P.S. Advise" %}</a>
+                        <div class="uk-accordion-content">
+                            <p>{% trans "If you are not interested in information on people who have accidentally entered the frame, then you can paint their faces in any graphic editor (such as Paint and other programs). This will significantly increase the search speed." %}
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        {% endblock search_instruction %}
+    </div>
+
+    {% block my_searches_block %}
+        {% if my_searches %}
+            {% for search in my_searches %}
+                <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+                    <div class="uk-card-media-left uk-cover-container">
+                        <img src="{{ search.photo.url }}" alt="" uk-cover>
+                        <canvas width="600" height="400"></canvas>
+                    </div>
+                    <div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title"><a href="{% url 'search_code' search.code %}">{% trans "Search" %} #{{ forloop.counter }}</a></h3>
+                            <ul class="uk-list">
+                                <li>{% trans "Identified" %} {{ search.universal_identified_face.count }}
+                                    {% trans "of" %} {{ search.detected_faces.count }} {% trans "persons" %}</li>
+                            </ul>
+                            {% if search.universal_identified_face.count %}
+                                <ul class="uk-list uk-list-bullet">
+                                {% for student in search.universal_identified_face.all %}
+                                    <li><a href="{% url 'student_page' student.student.user_id %}">{{ student.student.first_name }} {{ student.student.last_name }} ({{ student.identified_faces.first.similarity|floatformat:"-2" }}%)</a></li>
+                                {% endfor %}
+                            {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    {% endblock %}
+    <script>
+        function Submit_search_form() {
+            document.getElementById("search_by_photo_form").classList.add("uk-hidden");
+
+            document.getElementById("search_alert").classList.remove("uk-hidden");
+            document.getElementById("search_alert").classList.add("uk-visible");
+
+            UIkit.util.ready(function () {
+
+                var bar = document.getElementById('js-progressbar');
+
+                var animate = setInterval(function () {
+
+                    bar.value += 10;
+
+                    if (bar.value >= bar.max) {
+                        clearInterval(animate);
+                    }
+
+                }, 3000);
+
+            });
+        }
+    </script>
+{% endblock data_content %}

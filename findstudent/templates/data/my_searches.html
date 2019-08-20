@@ -1,0 +1,38 @@
+{% extends 'base_data.html' %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+{% load bootstrap4 %}
+
+{% block title %}{% trans "FindStudent" %} | {% trans "My searches" %}{% endblock %}
+{% block data_title %}{% trans "My searches" %}{% endblock %}
+
+{% block data_content %}
+    {% for search in object_list %}
+        <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+            <div class="uk-card-media-left uk-cover-container">
+                <img src="{{ search.photo.url }}" alt="" uk-cover>
+                <canvas width="600" height="400"></canvas>
+            </div>
+            <div>
+                <div class="uk-card-body">
+                    <h3 class="uk-card-title"><a href="{% url 'search_code' search.code %}">{% trans "Search" %} #{{ forloop.counter }}</a></h3>
+                    <ul class="uk-list">
+                        <li>{% trans "Identified" %} {{ search.universal_identified_face.count }}
+                            {% trans "of" %} {{ search.detected_faces.count }} {% trans "persons" %}</li>
+                    </ul>
+                    {% if search.universal_identified_face.count %}
+                                <ul class="uk-list uk-list-bullet">
+                                {% for student in search.universal_identified_face.all %}
+                                    <li><a href="{% url 'student_page' student.student.user_id %}">{{ student.student.first_name }} {{ student.student.last_name }} ({{ student.identified_faces.first.similarity|floatformat:"-2" }}%)</a></li>
+                                {% endfor %}
+                            {% endif %}
+                            </ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% bootstrap_pagination page_obj %}
+{% endblock data_content %}
